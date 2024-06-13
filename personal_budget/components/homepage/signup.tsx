@@ -2,11 +2,11 @@ import React from "react";
 
 export default function HomepageSignup() {
     return(
-        <div className="hero  bg- bg-primary">
+        <div className="hero bg-base-200 bg-opacity-80">
             <div className="hero-content flex-col lg:flex-row-reverse">
                 <div className="text-center lg:text-left">
                 <h1 className="text-5xl font-bold">Login now!</h1>
-                <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+                <p className="py-6 font-primary-content text-xl">Take control of your finances and unlock a clearer financial future by logging in to your personalized budget tracker. With instant access to your spending habits and savings goals, you'll be making informed money decisions in no time!.</p>
                 </div>
                 <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                 <form className="card-body">
@@ -22,7 +22,7 @@ export default function HomepageSignup() {
                     </label>
                     <input type="password" placeholder="password" className="input input-bordered" required />
                     <label className="label">
-                        <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                        <a href="#" className="label-text-alt link link-hover ">Forgot password?</a>
                     </label>
                     </div>
                     <div className="form-control mt-6">
