@@ -1,13 +1,22 @@
 'use client'
 import React from "react";
-export default function Modal() {
+
+export interface props {
+    title: string;
+    id: string;
+    data: React.ReactNode;
+  }
+
+export default function Modal( props: props ) { 
+    console.log(props.title)
+
     return (
         <div>
-            <button className=" text-white"  onClick={() => (document.getElementById('myModal') as HTMLFormElement).showModal()}>Sign up</button>
-            <dialog id="myModal" className="modal">
+            <button className=" text-white"  onClick={() => (document.getElementById(props.id) as HTMLFormElement).showModal()}>{props.title}</button>
+            <dialog id={props.id} className="modal">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Hello!</h3>
-                    <p className="py-4">Press ESC key or click the button below to close</p>
+                    <h3 className="font-bold text-lg">{props.title}</h3>
+                    {props.data}
                     <div className="modal-action">
                     <form method="dialog">
                         <button className="btn">Close</button>
@@ -21,5 +30,6 @@ export default function Modal() {
 
         </div>
         
-    )
+    );
 }
+

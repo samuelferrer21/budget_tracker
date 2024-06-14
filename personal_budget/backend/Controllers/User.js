@@ -7,8 +7,8 @@ const supabase = createClient("https://crxnirucwigphqmidezd.supabase.co", "eyJhb
 
 exports.user_signin = async (req, res) => {
     //Params
-    const email = req.query.email
-    const password = req.query.password
+    const email = req.body.email
+    const password =  req.body.password
     console.log(email)
 
     //console.log(data)
