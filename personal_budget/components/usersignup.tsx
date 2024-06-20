@@ -1,10 +1,20 @@
 'use client'
 import React from "react";
+import { useState, FormEvent } from "react";
 
-export default function SignIn() {
 
+export default function SignUp() {
+    const [status, setColor] = useState("");
+
+    //Trackstate of flash message 
+    const [error, setError] = useState<string | null>(null)
+
+    //Post user data
     const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
-        console.log('test')
+
+        //Reset states for each call
+        setError(null)
+
         event.preventDefault();
 
         const form = event.currentTarget as HTMLFormElement;
@@ -31,12 +41,29 @@ export default function SignIn() {
                 },
                 body: JSON.stringify(values)
             })
-            userRequest
+             //userRequest
+            
+             //Checks request status throws error message when needed.
+            if(userRequest.status == 422)
+            {
+                throw new Error("User is already Created")
+            }
+            else if (userRequest.status == 201)
+            {
+                setColor("alert alert-success")
+                setError("User successfully created")
+            }
+            else
+            {
+                throw new Error("Failed to create user try again")
+            }
         }
         catch (error)
         {
-            //sends an alert when error occurs
-            console.log(error)
+            //Sets the alert message
+            setError(error.message)
+            //Sets the alert colour and style
+            setColor("alert alert-error")
         }
 
     }
@@ -44,9 +71,11 @@ export default function SignIn() {
     return (
         <div className="mt-4">
             <div id="response" className="mb-4">
-                <div role="alert" className="alert alert-error">
-                    <span>Error! Task failed successfully.</span>
-                </div>
+                {error && 
+                    <div role="alert" className={status}>
+                    <span>{error}</span>
+                  </div>
+                }
             </div>
             <form className="grid gap-2" onSubmit={submitForm}>
                 <label>Email:</label>
