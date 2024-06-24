@@ -6,6 +6,7 @@ export default function Budgetused() {
         <div className="card-body">
             <h2 className="card-title">Budget Used</h2>
             <div className='contents'>
+
                 <label>housing</label>
                 <progress className="progress progress-success " value="0" max="100"></progress>
                 <label>Food</label>
@@ -16,6 +17,7 @@ export default function Budgetused() {
                 <progress className="progress progress-success" value="0" max="100"></progress>
                 <label>Entertainment</label>
                 <progress className="progress progress-success" value="0" max="100"></progress>
+                
             </div>
             <div className="card-actions justify-end">
             </div>

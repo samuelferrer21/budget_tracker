@@ -15,6 +15,9 @@ export default function Goals() {
                 <label>Trip</label>
                 <progress className="progress progress-success" value="0" max="100"></progress>
             </div>
+            <div className='card-actions'>
+              <button className="btn btn-neutral">Add Goal</button>
+            </div>
         </div>
     </div>
   )

@@ -12,7 +12,7 @@ export default function Modal( props: props ) {
 
     return (
         <div>
-            <button className=" text-white"  onClick={() => (document.getElementById(props.id) as HTMLFormElement).showModal()}>{props.title}</button>
+            <button className=" text-white btn btn-neutral"  onClick={() => (document.getElementById(props.id) as HTMLFormElement).showModal()}>{props.title}</button>
             <dialog id={props.id} className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{props.title}</h3>

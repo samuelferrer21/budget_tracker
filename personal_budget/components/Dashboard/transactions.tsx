@@ -1,4 +1,6 @@
 import React from 'react'
+import Modal from '../modal'
+import AddTransaction from './addtransaction'
 
 
 export default function Transactions() {
@@ -8,7 +10,7 @@ export default function Transactions() {
             <div className="card-body">
                 <div className='flex justify-between'>
                     <h2 className="card-title">Recent Transactions</h2>
-                    <button className="btn btn-active">Add Transaction</button>
+                    <Modal id="addTransaction" title ="Add Transaction" data={<AddTransaction/>}/>
                 </div>
                 
                 <div className="overflow-x-auto">
@@ -126,12 +128,10 @@ export default function Transactions() {
                             </tbody> 
                             <tfoot>
                             <tr>
-                                <th></th> 
                                 <td>Title</td> 
                                 <td>Type</td> 
                                 <td>Price</td> 
                                 <td>Date</td> 
-                                <th></th> 
                             </tr>
                             </tfoot>
                         </table>
