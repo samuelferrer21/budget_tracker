@@ -10,7 +10,7 @@ export default function Navbar() {
     //Items for detected user
     const userSignedIn = [
         {name: "Dashboard", Value: "/dashboard"},
-        {name: "Budget", Value: "#bduget"},
+        {name: "Budget", Value: "/budget"},
         {name: "Networth", Value: "#networth"},
         {name: "Interest Calculator", Value: "#calculator"},
         {name: "Signout", Value: "#signout"}
