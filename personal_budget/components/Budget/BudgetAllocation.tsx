@@ -7,8 +7,8 @@ import BudgetGraphs from './budgetGraphs'
 
 
 export default function BudgetAllocation() {
-  const budget = 1000
-  const [budgetAllocated, setBudgetAllocated] = useState(1000)
+  const budget = 3500
+  const [budgetAllocated, setBudgetAllocated] = useState(budget)
   const [housingAllocated, setHousingAllocated] = useState(0)
   const [foodAllocated, setFoodAllocated] = useState(0)
   const [savingsAllocated, setSavingsAllocated] = useState(0)
@@ -53,7 +53,7 @@ export default function BudgetAllocation() {
     budgetSubtracted = (+foodAllocated + +housingAllocated + +savingsAllocated + +transportationAllocated + +entertainmentAllocated + +otherAllocated)
     setBudgetAllocated(budget-budgetSubtracted)
     //Error Flash
-    if (budgetSubtracted > 1000)
+    if (budgetSubtracted > budget)
     {
       //Sets the alert message
       setError("Cant go over budget!")
