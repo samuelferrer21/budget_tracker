@@ -3,8 +3,11 @@ import React from "react";
 import { useState } from "react";
 import { getCookie, setCookie, deleteCookie, hasCookie, getCookies } from "cookies-next"
 import Router from "next/router";
+import useSupabase from "@/hooks/useSupabase";
+
 
 export default function Login() {
+    const supabase = useSupabase();
     const [status, setColor] = useState("");
     //Trackstate of flash message 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -12,7 +15,6 @@ export default function Login() {
 
     //Post user data
     const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
-
         //Reset states for each call
         setIsLoading(true)
         setError(null)
@@ -32,39 +34,19 @@ export default function Login() {
         //Activate post
         try
         {
-            const userRequest = await fetch('http://localhost:3001/user/signin',{
-                
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(values),    
-            })
-             //userRequest
             
-             //Checks request status throws error message when needed.
-            if(userRequest.status == 401)
+            //Sign in
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: values['email'],
+                password: values['password'],
+              });
+            if(error)
             {
-                throw new Error("Invalid Credentials, Please Try Again")
+                throw error
             }
-            else if (userRequest.status == 200)
-            {
-                const data = await userRequest.json()
-                
-                setColor("alert alert-success")
-                setError("User Logged In")
+            //Refresh page
+            window.location.reload();
 
-                //Set a session cookie
-                setCookie("access_token", data["user"]["access_token"], {maxAge: 60 * 60 * 24 })
-                setCookie("refresh_token", data["user"]["refresh_token"], {maxAge: 60 * 60 * 24 })
-                setCookie("email", data["user"]["email"], {maxAge: 60 * 60 * 24 })
-                window.location.reload();
-            }
-            else
-            {
-                throw new Error("Failed to create user try again")
-            }
           
         }
         catch (error)
@@ -74,7 +56,6 @@ export default function Login() {
             //Sets the alert colour and style
             setColor("alert alert-error")
         }
-
     }
     return (
         <div>

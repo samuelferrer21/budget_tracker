@@ -1,11 +1,33 @@
+'use client'
 import Link from "next/link";
-import React from "react";
-import { getCookie, setCookie, deleteCookie, hasCookie, getCookies } from "cookies-next"
-import { cookies } from 'next/headers';
+import { createClient } from '@supabase/supabase-js'
 import NavBarItems from "./navbaritems";
+import useSupabase from "@/hooks/useSupabase";
+import { useEffect, useState } from "react";
+
 
 export default function Navbar() {
-
+    const [status, setStatus] = useState(false)
+    useEffect(() => {
+    async function checkSession() {
+        const supabase = useSupabase()
+        let exists = null
+         const jwt = ((await supabase.auth.getSession()).data.session?.access_token);
+         const {data, error} = await supabase.auth.getUser(jwt)
+    
+        if (error != null) {
+            console.log("No User")
+        exists = false;
+        } else {
+            console.log("User exists")
+        exists = true;
+        }
+    
+        await setStatus(exists)
+      }
+      checkSession()
+    })
+    
   
     //Items for detected user
     const userSignedIn = [
@@ -20,18 +42,6 @@ export default function Navbar() {
         <li key={item.Value}><Link href={item.Value}>{item.name}</Link></li>
     ));
 
-    //Conditional to detect if a user is detected or not
-    var userStatus = false
-    
-    const access_token = hasCookie('access_token', { cookies });
-    const refresh_token = hasCookie('refresh_token', { cookies });
-    const email = hasCookie('email', { cookies });
-
-    if (access_token && refresh_token && email)
-    {
-        userStatus = true
-    }
-
     return (
         <div className="navbar bg-base-100 shadow-xl">
             <div className="navbar-start">
@@ -40,9 +50,8 @@ export default function Navbar() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                 </div>
                 <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-neutral rounded-box w-52">
-
                     { 
-                        userStatus ? userDetected : <NavBarItems id="mobileModal"/>
+                        status ? (userDetected) : (<NavBarItems id="mobileModal"/>)
                     }
                 </ul>
                 </div>
@@ -52,7 +61,7 @@ export default function Navbar() {
                 <ul className="menu menu-horizontal px-1">
                     {/* Conditional that detects if the user is detected */}
 
-                    {userStatus ? userDetected : <NavBarItems id="desktopModal"/> }
+                    {status ? (userDetected) : (<NavBarItems id="desktopModal"/>) }
                 </ul>
             </div>
         </div>

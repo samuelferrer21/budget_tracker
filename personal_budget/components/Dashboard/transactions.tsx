@@ -1,9 +1,11 @@
-import React from 'react'
-import Modal from '../modal'
-import AddTransaction from './addtransaction'
+import React from 'react';
+import Modal from '../modal';
+import AddTransaction from './addtransaction';
 
 
-export default function Transactions() {
+  export default function Transactions( ) {
+    //Save Transaction
+    //Fetch transactions
   return (
     <div>
         <div className="card lg:card-side bg-base-300 shadow-xl w-full mb-4">
@@ -142,3 +144,5 @@ export default function Transactions() {
     </div>
   )
 }
+
+

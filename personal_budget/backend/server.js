@@ -3,6 +3,7 @@ const cors = require("cors")
 
 const app = express()
 const userRoute = require("./Routes/user")
+const categoryRoute = require("./Routes/Categories/categories")
 
 
 require("dotenv").config();
@@ -19,8 +20,7 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 app.use("/user", userRoute)
-
-
+app.use("/category", categoryRoute)
   
 //Configures cors to allow request from nextjs application
 app.use(

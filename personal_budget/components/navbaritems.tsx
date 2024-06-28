@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import Modal from "./modal";
 import SignIn from "./usersignup";
