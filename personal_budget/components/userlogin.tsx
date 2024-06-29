@@ -1,9 +1,8 @@
 'use client'
 import React from "react";
 import { useState } from "react";
-import { getCookie, setCookie, deleteCookie, hasCookie, getCookies } from "cookies-next"
-import Router from "next/router";
 import useSupabase from "@/hooks/useSupabase";
+import { use } from "react";
 
 
 export default function Login() {
@@ -14,7 +13,7 @@ export default function Login() {
     const [error, setError] = useState<string | null>(null)
 
     //Post user data
-    const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
         //Reset states for each call
         setIsLoading(true)
         setError(null)
@@ -36,10 +35,10 @@ export default function Login() {
         {
             
             //Sign in
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const { data, error } =  use(supabase.auth.signInWithPassword({
                 email: values['email'],
                 password: values['password'],
-              });
+              }));
             if(error)
             {
                 throw error

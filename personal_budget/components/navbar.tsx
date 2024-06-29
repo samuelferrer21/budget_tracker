@@ -1,12 +1,13 @@
 'use client'
 import Link from "next/link";
-import { createClient } from '@supabase/supabase-js'
 import NavBarItems from "./navbaritems";
 import useSupabase from "@/hooks/useSupabase";
 import { useEffect, useState } from "react";
 
 
+
 export default function Navbar() {
+    //Chech if user is logged in
     const [status, setStatus] = useState(false)
     useEffect(() => {
     async function checkSession() {
@@ -16,10 +17,9 @@ export default function Navbar() {
          const {data, error} = await supabase.auth.getUser(jwt)
     
         if (error != null) {
-            console.log("No User")
+        
         exists = false;
         } else {
-            console.log("User exists")
         exists = true;
         }
     
@@ -27,8 +27,7 @@ export default function Navbar() {
       }
       checkSession()
     })
-    
-  
+
     //Items for detected user
     const userSignedIn = [
         {name: "Dashboard", Value: "/dashboard"},

@@ -8,8 +8,6 @@ export interface props {
   }
 
 export default function Modal( props: props ) { 
-    console.log(props.title)
-
     return (
         <div>
             <button className=" text-white btn btn-neutral"  onClick={() => (document.getElementById(props.id) as HTMLFormElement).showModal()}>{props.title}</button>

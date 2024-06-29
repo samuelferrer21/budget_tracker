@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import { useState, FormEvent } from "react";
-
+import { use } from "react";
 
 export default function SignUp() {
     const [status, setColor] = useState("");
@@ -10,7 +10,7 @@ export default function SignUp() {
     const [error, setError] = useState<string | null>(null)
 
     //Post user data
-    const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
 
         //Reset states for each call
         setError(null)
@@ -28,27 +28,20 @@ export default function SignUp() {
             password: formData.get('password') as string
         };
 
-        console.log(values)
-
-        //Activate post
-        try
-        {
-            const userRequest = await fetch('http://localhost:3001/user/signup',{
-            
-                method: "POST",
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(values)
-            })
-             //userRequest
-            
-             //Checks request status throws error message when needed.
-            if(userRequest.status == 422)
+        //Creates a user
+        const userRequest = fetch('http://localhost:3001/user/signup',{
+        
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(values)
+        }).then(response => {
+            if(response.status == 422)
             {
                 throw new Error("User is already Created")
             }
-            else if (userRequest.status == 201)
+            else if (response.status == 201)
             {
                 setColor("alert alert-success")
                 setError("User successfully created")
@@ -57,15 +50,14 @@ export default function SignUp() {
             {
                 throw new Error("Failed to create user try again")
             }
-        }
-        catch (error)
-        {
+        })
+        .catch(error => {
             //Sets the alert message
             setError(error.message)
             //Sets the alert colour and style
             setColor("alert alert-error")
-        }
-
+        })
+             
     }
 
     return (

@@ -2,13 +2,11 @@ import Budgetused from '@/components/Dashboard/budgetused'
 import Goals from '@/components/Dashboard/goals'
 import Stats from '@/components/Dashboard/stats' 
 import Transactions from '../../components/Dashboard/transactions'
-import React, { useEffect, useState } from 'react'
 
 
 
 
 export default function page() {
-
   
   return (
     <main className='bg-base-100'>

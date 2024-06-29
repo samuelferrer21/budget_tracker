@@ -2,9 +2,19 @@ import React from 'react';
 import Modal from '../modal';
 import AddTransaction from './addtransaction';
 
+async function categoriesData()
+{
+    const res = await fetch('http://localhost:3001/category/getcategories')
+ 
+    if (!res.ok) {
+        // This will activate the closest `error.js` Error Boundary
+        throw new Error('Failed to fetch data')
+    }
+ 
+    return res.json()
+}
 
-  export default function Transactions( ) {
-    //Save Transaction
+  export default async function Transactions( ) {
     //Fetch transactions
   return (
     <div>
@@ -12,9 +22,8 @@ import AddTransaction from './addtransaction';
             <div className="card-body">
                 <div className='flex justify-between'>
                     <h2 className="card-title">Recent Transactions</h2>
-                    <Modal id="addTransaction" title ="Add Transaction" data={<AddTransaction/>}/>
+                    <Modal id="addTransaction" title ="Add Transaction" data={<AddTransaction categories={await categoriesData()}/>}/>
                 </div>
-                
                 <div className="overflow-x-auto">
                     <div className="h-96 overflow-y-auto">
                         <table className="table table-md table-pin-rows table-pin-cols">

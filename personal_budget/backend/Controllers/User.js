@@ -26,8 +26,17 @@ exports.user_signup = async (req, res) => {
     }
     catch (error)
     {
-        console.log(error)
+      console.log(error)
+      if(error.status == 422)
+      {
         return res.status(422).json({message:"Failed to create user", error})
+      }
+      else
+      {
+        return res.status(400).json({message:"An error occured", error})
+      }
+        
+        
     }
 }
 
