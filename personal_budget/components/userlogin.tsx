@@ -31,30 +31,30 @@ export default function Login() {
         };
 
         //Activate post
-        try
-        {
-            
-            //Sign in
-            const { data, error } =  use(supabase.auth.signInWithPassword({
-                email: values['email'],
-                password: values['password'],
-              }));
-            if(error)
+        //Sign in
+        const { data, error } =  supabase.auth.signInWithPassword({
+            email: values['email'],
+            password: values['password'],
+            }).then(response => {
+            if(response.error)
             {
-                throw error
+                throw new Error(response.error.message)
             }
-            //Refresh page
-            window.location.reload();
+            else
+            {
+                setError("User Successfully Logged In")
+                setColor("alert alert-success") 
+                //Refresh page
+                window.location.reload();
+            }
+            }).catch(error => {
+                //Sets the alert message
+                setError(error.message)
+                //Sets the alert colour and style
+                setColor("alert alert-error")
+            });
 
-          
-        }
-        catch (error)
-        {
-            //Sets the alert message
-            setError(error.message)
-            //Sets the alert colour and style
-            setColor("alert alert-error")
-        }
+        
     }
     return (
         <div>

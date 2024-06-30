@@ -3,10 +3,10 @@ import Goals from '@/components/Dashboard/goals'
 import Stats from '@/components/Dashboard/stats' 
 import Transactions from '../../components/Dashboard/transactions'
 
+//Retrieve Transactions
 
 
-
-export default function page() {
+export default async function page() {
   
   return (
     <main className='bg-base-100'>
