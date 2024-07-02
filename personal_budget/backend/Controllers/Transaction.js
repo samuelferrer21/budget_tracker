@@ -44,7 +44,7 @@ exports.addtransaction= async (req, res,) =>{
     }
     catch (error)
     {
-       return res.status(400).json({message: 'Invalid Token', error})
+       return res.status(400).json({message: 'Error Occured', error})
     }
 }
 

@@ -24,17 +24,15 @@ export default function ListTransactions() {
       let data = await res.json();
     
       let listItems = null
-      listItems = await data['data'].map(item => (
+      listItems = await data['data'].map(item=> (
         <tr key={item.id}>
           <td>{item.transaction_name}</td>
           <td>{item.transaction_description}</td>
+          <td>{item.category}</td>
           <td>{item.transaction_price}</td>
-          <td>{item.transaction_category}</td>
           <td>{item.date}</td>
         </tr>
       ))
-    
-    
       setTransactions(listItems);
     }
 
@@ -71,8 +69,5 @@ export default function ListTransactions() {
       </table>
     </div>
   </div>
-              
-
-
   )
 }

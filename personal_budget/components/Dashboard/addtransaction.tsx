@@ -10,7 +10,7 @@ export default function AddTransaction(props: props){
   const selectionOptions = props.categories
   console.log(props.categories)
 
-  const [status, setColor] = useState("");
+  const [colorstatus, setColor] = useState("");
   //Trackstate of flash message 
   const [error, setError] = useState<string | null>(null)
 
@@ -60,6 +60,21 @@ export default function AddTransaction(props: props){
           'content-type': 'application/json'
       },
       body: JSON.stringify(values)
+    }).then(response => {
+      if(response.status == 200)
+      {
+        console.log("Added Transaction")
+        setColor("alert alert-success")
+        setError("Added Transaction")
+      }
+      else
+      {
+        throw new Error("Failed to add transaction")
+      }
+    })
+    .catch(error => {
+      setColor("alert alert-error")
+      setError(error.message)
     })
   }
 
@@ -68,7 +83,7 @@ export default function AddTransaction(props: props){
     <div className="mt-4">
             <div id="response" className="mb-4">
               {error && 
-                    <div role="alert" className={status}>
+                    <div role="alert" className={colorstatus}>
                     <span>{error}</span>
                   </div>
                 }
