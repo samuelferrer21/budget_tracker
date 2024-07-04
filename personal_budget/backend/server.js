@@ -5,6 +5,7 @@ const app = express()
 const userRoute = require("./Routes/user")
 const categoryRoute = require("./Routes/Categories/categories")
 const transactionRoute = require("./Routes/Transaction/transactions")
+const goalRoute = require("./Routes/Goals/goals")
 
 
 require("dotenv").config();
@@ -23,6 +24,7 @@ app.use(express.json())
 app.use("/user", userRoute)
 app.use("/category", categoryRoute)
 app.use("/transaction", transactionRoute)
+app.use("/goal",goalRoute)
   
 //Configures cors to allow request from nextjs application
 app.use(

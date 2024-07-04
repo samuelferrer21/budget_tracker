@@ -25,6 +25,7 @@ exports.addtransaction= async (req, res,) =>{
             const description = req.body.description
             const category = req.body.category
             const cost = req.body.cost
+            const date = req.body.date
             
             //Create Transaction
             const {error} = await supabase.from("transactions").insert(
@@ -33,11 +34,10 @@ exports.addtransaction= async (req, res,) =>{
                     transaction_description: description,
                     transaction_price: Number.parseInt(cost),
                     user_data_id: user_id,
-                    date: "2024/6/29",
+                    date: date,
                     category: category
                 }
             )
-            console.log(error)
 
             return res.status(200).json({message:"Added To Transactions"})
         }
@@ -51,24 +51,23 @@ exports.addtransaction= async (req, res,) =>{
 exports.gettransactions= async (req, res,) =>{
     try {
         
-        // const jwt = req.headers.authorization.replace("Bearer ", "")
-    
-        // const {data, error} = ((await supabase.auth.getUser(jwt)))
-        // console.log(data.user)
-        // //Verify validity of user and access token
-        // if(data.user == null)
-        // {
-        //     throw new Error(error)
-        // }
-        // else
-        // {
+        const jwt = req.headers.authorization.replace("Bearer ", "")
+   
+        const {data, error} = ((await supabase.auth.getUser(jwt)))
+        let id = data.user.id
+        //Verify validity of user and access token
+        if(data.user == null)
+        {
+            throw new Error(error)
+        }
+        else
+        {
             //Grabs Transactions
-            const {data, error} = await supabase.from('transactions').select('*')
+            const {data, error} = await supabase.from('transactions').select('*,categories ( category_name)').eq('user_data_id', id)
 
-            console.log(data.json)
 
             return res.status(200).json({message:"Added To Transactions", data})
-        // }
+        }
     }
     catch (error)
     {

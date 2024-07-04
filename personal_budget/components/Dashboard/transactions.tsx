@@ -7,9 +7,7 @@ import { use } from "react";
 async function categoriesData()
 {
     const res = await fetch('http://localhost:3001/category/getcategories')
-    console.log("Ran categories")
     return await res.json()
-    
 }
 
 export default async function Transactions() {

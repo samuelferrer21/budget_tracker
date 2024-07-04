@@ -1,4 +1,7 @@
 import React from 'react'
+import Modal from '../modal'
+import AddGoal from './addgoal'
+import ListGoals from './listgoals'
 
 export default function Goals() {
   return (
@@ -6,17 +9,10 @@ export default function Goals() {
         <div className="card-body">
             <h2 className="card-title">Goals</h2>
             <div className='contents'>
-                <label>TFSA</label>
-                <progress className="progress progress-success " value="0" max="100"></progress>
-                <label>FHSA</label>
-                <progress className="progress progress-success" value="50" max="100"></progress>
-                <label>Savings</label>
-                <progress className="progress progress-success" value="0" max="100"></progress>
-                <label>Trip</label>
-                <progress className="progress progress-success" value="0" max="100"></progress>
+                <ListGoals/>
             </div>
             <div className='card-actions'>
-              <button className="btn btn-neutral">Add Goal</button>
+              <Modal title='Add Goal' id='addGoal' data={<AddGoal/>}/>
             </div>
         </div>
     </div>
