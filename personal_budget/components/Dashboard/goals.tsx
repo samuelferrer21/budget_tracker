@@ -1,3 +1,4 @@
+
 import React from 'react'
 import Modal from '../modal'
 import AddGoal from './addgoal'
@@ -9,7 +10,7 @@ export default function Goals() {
         <div className="card-body">
             <h2 className="card-title">Goals</h2>
             <div className='contents'>
-                <ListGoals/>
+              <ListGoals/>
             </div>
             <div className='card-actions'>
               <Modal title='Add Goal' id='addGoal' data={<AddGoal/>}/>

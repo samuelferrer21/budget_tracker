@@ -34,8 +34,8 @@ export default function AddGoal() {
     const jwt = (await supabase.auth.getSession()).data.session?.access_token;
     console.log(jwt)
 
-    // //Creates a POST request to create transaction
-    const userRequest = fetch('http://localhost:3001/goal/addgoal',{
+    //Creates a POST request to create transaction
+    const userRequest = fetch('http://localhost:3001/goal/goal',{
       method: "POST",
       headers: {
           'authorization': 'Bearer ' + jwt,
