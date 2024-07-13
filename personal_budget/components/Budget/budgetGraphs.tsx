@@ -22,7 +22,6 @@ export default function BudgetGraphs(props: props) {
                 Current Budget
               </div>
               <CurrentBudgetGraph/>
-            
             </div>
         </div>
         {/* Proposed Allocation */}

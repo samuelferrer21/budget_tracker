@@ -1,91 +1,171 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState, FormEvent } from 'react'
 import BudgetLabel from './budgetLabel'
 import BudgetGraphs from './budgetGraphs'
+import useSupabase from '@/hooks/useSupabase'
+import BudgetStat from './budgetStat'
 
+//Variables to calculate the subtracted total
+let newHousingAllocated = 0;
+let newFoodAllocated = 0;
+let newSavingsAllocated = 0;
+let newTransportationAllocated = 0;
+let newEntertainmentAllocated = 0;
+let newOtherAllocated = 0;
 
 export default function BudgetAllocation() {
+  const [currentBudget, setCurrentBudget] = useState<number>(0)
+  useEffect(() => {
+    async function fetchBudget(){
+      const supabase = useSupabase()
+      const userId = (await (supabase.auth.getSession())).data.session?.user.id
+      //Get jwt
+      const jwt = (await supabase.auth.getSession()).data.session?.access_token;
+      const res =  await fetch(`http://localhost:3001/budget/${userId}/budget`, {
+        method: "GET",
+        headers: {
+          'authorization': 'Bearer ' + jwt,
+          'content-type': 'application/json'
+        }
+      })
+      let value = await res.json()
+      setCurrentBudget(value.body[0]['total_budget'])
+      
+    }
+    fetchBudget()
+  },[])
+  
+  
+
+
   const budget = 3500
-  const [budgetAllocated, setBudgetAllocated] = useState(budget)
-  const [housingAllocated, setHousingAllocated] = useState(0)
-  const [foodAllocated, setFoodAllocated] = useState(0)
-  const [savingsAllocated, setSavingsAllocated] = useState(0)
-  const [transportationAllocated, setTransportationAllocated] = useState(0)
-  const [entertainmentAllocated, setEntertainmentAllocated] = useState(0)
-  const [otherAllocated, setOtherAllocated] = useState(0)
-
+  const [budgetAllocated, setBudgetAllocated] = useState<number>(budget)
+  const [housingAllocated, setHousingAllocated] = useState<number>(0)
+  const [foodAllocated, setFoodAllocated] = useState<number>(0)
+  const [savingsAllocated, setSavingsAllocated] = useState<number>(0)
+  const [transportationAllocated, setTransportationAllocated] = useState<number>(0)
+  const [entertainmentAllocated, setEntertainmentAllocated] = useState<number>(0)
+  const [otherAllocated, setOtherAllocated] = useState<number>(0)
+  //Submit Button State
   const [buttonDisabled, setButtonDisabled] = useState(false)
+  //Response States
+  const [error, setError] = useState<string>()
+  const [color, setColor] = useState<string>()
 
-  var budgetSubtracted = 0
 
-  const [error, setError] = useState<string | null>(null)
-
-  //allocation variables
+  
+  //Calculates the total to be subtracted
+  function totalSubtracted()
+  {
+    return (newHousingAllocated + newFoodAllocated  + newSavingsAllocated + newTransportationAllocated + newEntertainmentAllocated + newOtherAllocated)
+  }
 
   function setBudgetAllocation(e: any)
   {
+  
+    const value = parseInt(e.target.value)
     console.log("Current: " + e.target.id)
-    //Checks form id and changes variable accordingly
-    switch (e.target.id.toString()) {
+    console.log("Value: " + e.target.value)
+    //Checks form id and changes useState accordingly
+    switch (e.target.id) {
       case 'Housing':
-        setHousingAllocated(e.target.value)
+        setHousingAllocated(value)
+        newHousingAllocated = value
         break
-        
       case 'Food':
+        setFoodAllocated(value)
+        newFoodAllocated = value
         
-        setFoodAllocated(e.target.value)
         break
       case 'Savings':
-        setSavingsAllocated(e.target.value)
+        setSavingsAllocated(value)
+        newSavingsAllocated = value
+        
         break
       case 'Transportation':
-        setTransportationAllocated(e.target.value)
+        setTransportationAllocated(value)
+        newTransportationAllocated = value
+        
         break
       case 'Entertainment':
-        setEntertainmentAllocated(e.target.value)
+        setEntertainmentAllocated(value)
+        newEntertainmentAllocated = value
         break
       case 'Other':
-        setOtherAllocated(e.target.value)
+        setOtherAllocated(value)
+        newOtherAllocated = value
         break
     }
-    budgetSubtracted = (+foodAllocated + +housingAllocated + +savingsAllocated + +transportationAllocated + +entertainmentAllocated + +otherAllocated)
-    setBudgetAllocated(budget-budgetSubtracted)
+    
+    setBudgetAllocated(budget - totalSubtracted())
     //Error Flash
-    if (budgetSubtracted > budget)
+    if (totalSubtracted() > budget)
     {
       //Sets the alert message
       setError("Cant go over budget!")
+      setColor("alert alert-error")
       setButtonDisabled(true)
     }
     else
     {
-      setError(null)
+      setError("")
       setButtonDisabled(false)
     }
   }
 
-  // const submitNewAllocation = async (event: React.FormEvent<HTMLFormElement>) =>
-  // {
-  //   event.preventDefault();
+  async function submitForm(event: React.FormEvent)
+  {
+    
+    const supabase = useSupabase()
+    event.preventDefault()
 
-  //   try 
-  //   {
-  //     console.log("housing: " + housing)
-  //     console.log("food: " +food)
-  //     console.log("savings: " +savings)
-  //     console.log("transportation: " +transportation)
-  //     console.log("entertainment: " +entertainment)
-  //     console.log("other: " +other)
-  //   }
-  //   catch
-  //   {
-  //     console.log("test")
-  //   }
-  // }
+    const values = {
+      housing: housingAllocated,
+      food: foodAllocated,
+      savings: savingsAllocated,
+      transportation: transportationAllocated,
+      entertainment: entertainmentAllocated,
+      other: otherAllocated,
+      total: budgetAllocated
+    }
 
+    //Post Request
+    const userId = (await supabase.auth.getSession()).data.session?.user.id;
+    //Get jwt
+    const jwt = (await supabase.auth.getSession()).data.session?.access_token;
+    console.log(jwt)
+    console.log(userId)
+    
+
+    //Creates a POST request to create transaction
+    const userRequest = fetch(`http://localhost:3001/budget/${userId}/update`,{
+      method: "PUT",
+      headers: {
+          'authorization': 'Bearer ' + jwt,
+          'content-type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }).then(response => {
+      if(response.status == 200)
+      {
+        setColor("alert alert-success");
+        setError("Updated Goal");
+      }
+      else
+      {
+        throw new Error(response.statusText)
+      }
+    })
+    .catch(error => {
+      setColor("alert alert-error")
+      setError(error.message)
+    })
+  }
   return (
+    <div>
+    <BudgetStat budget={currentBudget}/>
     <div className='sm:grid-cols-2 gap-4 grid grid-cols-1'>
       {/* Budget Slider */}
       <div className="card lg:card-side bg-base-300 shadow-xl">
@@ -93,18 +173,18 @@ export default function BudgetAllocation() {
               <h2 className="card-title">Budget Allocation</h2>
               <div>
                 <p>Current Budget: ${budget}</p>
-                <p>Budget Allocated %: {budgetAllocated}</p>
-                <button className="btn btn-neutral">Change Budget</button>
+                <p>Budget Allocated $: {budgetAllocated}</p>
+                <button className="btn btn-neutral">Reset Budget</button>
               </div>
               <div id="response" className="mb-4">
                       {error && 
-                          <div role="alert" className="alert alert-error">
+                          <div role="alert" className={color}>
                           <span>{error}</span>
                       </div>
                       }
               </div>
               <div className='contents'>
-                <form  >
+                <form  onSubmit={submitForm}>
                   <div>
                     <BudgetLabel title="Housing" allocated={housingAllocated}/>
                     <input type="range" min="0" max={budget} id='Housing' step="1" name='Housing' className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
@@ -115,7 +195,7 @@ export default function BudgetAllocation() {
                   </div>
                   <div>
                     <BudgetLabel title="Savings" allocated={savingsAllocated}/>
-                    <input type="range" min="0" max={budget} id='Savings' name='Savings' step="1" className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
+                    <input type="range" min="0" max={budget} id='Savings' name='Savings' step="1" className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e) }/>
                   </div>
                   <div>
                     <BudgetLabel title="Transportation" allocated={transportationAllocated}/>
@@ -139,5 +219,6 @@ export default function BudgetAllocation() {
           <BudgetGraphs housing={housingAllocated} food={foodAllocated} transportation={transportationAllocated} savings={savingsAllocated} entertainment={entertainmentAllocated} other={otherAllocated}/>
         </div>
     </div>
+  </div>
   )
 }

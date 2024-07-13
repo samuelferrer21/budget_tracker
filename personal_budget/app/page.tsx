@@ -9,7 +9,7 @@ import Content from "@/components/homepage/content";
 
 
 
-export default async function Home() {
+export default function Home() {
 
   
   return (

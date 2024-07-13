@@ -1,14 +1,19 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import useSupabase from '@/hooks/useSupabase';
+
+
+export interface props{
+  setLoading: Dispatch<SetStateAction<boolean>>
+  loading: boolean
+}
 
 /*
 Description: Lists all the items of the transactions using props recieved from the transactions component.
 */
-export default function ListTransactions() {
+export default function ListTransactions(props: props) {
   const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     //Fetches transactions
@@ -41,11 +46,14 @@ export default function ListTransactions() {
         </tr>
       ))
       setTransactions(listItems);
-      setLoading(false)
+      props.setLoading(false)
     }
 
-    fetchTransactions();
-  },[])
+    if(props.loading)
+    {
+      fetchTransactions();
+    }
+  },[props.loading])
 
   //Table of transactions
   let table = (
@@ -82,7 +90,7 @@ export default function ListTransactions() {
   
   return (
     <div>
-      {loading ? <span className="loading loading-spinner text-accent"></span> : table}
+      {props.loading ? <span className="loading loading-spinner text-accent"></span> : table}
     </div>
     
   )

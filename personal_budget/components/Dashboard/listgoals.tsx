@@ -43,7 +43,7 @@ export default function ListGoals() {
                             {/* Add Money */}
                             <ModalImageButton id={item.goal_title} title={item.goal_title} data={<AddMoney goal_id={item.id} currentAmount={item.goal_amount_saved} currentGoal={item.goal_amount} setLoading={setLoading}/>} svg='http://www.w3.org/2000/svg' svg_path={money}/>
                             {/* Edit goal */}
-                            <ModalImageButton id={item.goal_title + "_edit"} title={item.goal_title} data={<UpdateGoal goal_id={item.id} currentGoal={item.goal_amount}/>} svg='http://www.w3.org/2000/svg'svg_path={pencil}/>
+                            <ModalImageButton id={item.goal_title + "_edit"} title={item.goal_title} data={<UpdateGoal goal_id={item.id} currentGoal={item.goal_amount} setLoading={setLoading}/>} svg='http://www.w3.org/2000/svg'svg_path={pencil}/>
                             
                             {/* <ModalImageButton id={item.goal_title} title={item.goal_title} data={<UpdateGoal goal_id={item.id} currentGoal={item.goal_amount} />} svg="http://www.w3.org/2000/svg" svg_path={trashcan}/>  */} 
                         </div>

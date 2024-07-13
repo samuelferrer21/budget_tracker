@@ -12,7 +12,6 @@ exports.addtransaction= async (req, res,) =>{
         const jwt = req.headers.authorization.replace("Bearer ", "")
 
         const {data, error} = ((await supabase.auth.getUser(jwt)))
-        console.log(data.user)
         //Verify validity of user and access token
         if(data.user == null)
         {

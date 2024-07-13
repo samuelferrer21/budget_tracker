@@ -13,6 +13,7 @@ export default function AddMoney(props: props) {
     const [colorstatus, setColor] = useState("")
     const [error, setError] = useState<String | null>(null)
 
+    //Handles form submission
     async function submitForm(event: React.FormEvent<HTMLFormElement>) {
       const supabase = useSupabase();
       event.preventDefault();
@@ -46,9 +47,9 @@ export default function AddMoney(props: props) {
       }).then(response => {
         if(response.status == 200)
         {
-          setColor("alert alert-success")
-          setError("Updated Goal")
-          props.setLoading(true)
+          setColor("alert alert-success");
+          setError("Updated Goal");
+          props.setLoading(true);
         }
         else
         {

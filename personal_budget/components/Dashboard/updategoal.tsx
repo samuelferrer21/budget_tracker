@@ -1,10 +1,11 @@
 import useSupabase from '@/hooks/useSupabase'
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
 
 export interface props{
   currentGoal: number,
   goal_id: string,
+  setLoading: Dispatch<SetStateAction<boolean>>
 }
 
 export default function UpdateGoal(props: props) {
@@ -42,8 +43,9 @@ export default function UpdateGoal(props: props) {
       }).then(response => {
         if(response.status == 200)
         {
-          setColor("alert alert-success")
-          setError("Updated Goal")
+          setColor("alert alert-success");
+          setError("Updated Goal");
+          props.setLoading(true);
         }
         else
         {

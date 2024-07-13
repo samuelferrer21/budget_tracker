@@ -25,8 +25,12 @@ export default function Navbar() {
     
         await setStatus(exists)
       }
-      checkSession()
-    })
+      if(!status)
+      {
+        checkSession()
+      }
+      
+    },[status])
 
     //Items for detected user
     const userSignedIn = [

@@ -1,9 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { SetStateAction, Dispatch, useEffect, useState } from 'react'
 import useSupabase from '@/hooks/useSupabase';
 
 export interface props {
   categories: any;
+  loading: Dispatch<SetStateAction<boolean>>
 }
 
 export default function AddTransaction(props: props){
@@ -67,6 +68,8 @@ export default function AddTransaction(props: props){
         console.log("Added Transaction")
         setColor("alert alert-success")
         setError("Added Transaction")
+        props.loading(true)
+
       }
       else
       {
