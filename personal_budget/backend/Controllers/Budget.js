@@ -66,7 +66,53 @@ exports.changeBudget = async (req, res) => {
                 savings_allocation: savingsValues,
                 transportation_allocation: transportationValues,
                 entertainment_allocation: entertainmentValues,
-                other_allocation: otherValues,
+                other_allocation: otherValues
+            }
+        ).eq('user_id', userid)
+        if(error)
+        {
+            console.log(error)
+            throw new Error(error)
+        }
+        return res.status(200).json({message:"Updated Budget"})
+    }
+    catch (error)
+    {
+       return res.status(400).json({message: 'Error Occured'}, error)
+
+    }
+}
+
+exports.changeTotalBudget = async (req, res) => {
+    try {
+
+        const jwt = req.headers.authorization.replace("Bearer ", "")
+        const {data, userError} = ((await supabase.auth.getUser(jwt)))
+
+        if(data.user == null)
+        {
+            throw new Error(userError)
+        }
+        //Values
+        const userid = data.user.id
+
+        const totalValue = parseInt(req.body.amount)
+
+ 
+        if(userid != req.params.id)
+        {
+            throw new Error("Failed Authorization")
+        }
+        //Update Budget
+        const {response, error} = await supabase.from('budget').update(
+            {
+
+                housing_allocation: 0,
+                food_allocation: 0,
+                savings_allocation: 0,
+                transportation_allocation: 0,
+                entertainment_allocation: 0,
+                other_allocation: 0,
                 total_budget: totalValue
             }
         ).eq('user_id', userid)

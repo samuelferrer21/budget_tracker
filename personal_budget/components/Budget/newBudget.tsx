@@ -1,17 +1,15 @@
 'use client'
-import useSupabase from '@/hooks/useSupabase';
 import React from 'react'
 import { useState } from 'react';
+import useSupabase from '@/hooks/useSupabase';
 
-export default function AddGoal() {
-  const [colorstatus, setColor] = useState("");
-  //Trackstate of flash message 
-  const [error, setError] = useState<string | null>(null)
+export default function NewBudget() {
+    const [colorstatus, setColor] = useState("");
+    //Trackstate of flash message 
+    const [error, setError] = useState<string | null>(null)
 
-
-
-  //Adds the goal
-  async function addgoal(event: React.FormEvent<HTMLFormElement>) {
+    //Adds the goal
+  async function changeBudget(event: React.FormEvent<HTMLFormElement>) {
     const supabase = useSupabase()
     event.preventDefault();
 
@@ -23,20 +21,18 @@ export default function AddGoal() {
 
      //Grab our values
      const values = {
-      title: formData.get("title") as string,
       amount: formData.get("amount") as unknown as number,
     };
-
-    console.log(values)
 
     //Post Request
     //Get jwt
     const jwt = (await supabase.auth.getSession()).data.session?.access_token;
+    const userId = (await supabase.auth.getSession()).data.session?.user.id;
     console.log(jwt)
 
     //Creates a POST request to create transaction
-    const userRequest = fetch('http://localhost:3001/goal/goal',{
-      method: "POST",
+    const userRequest = fetch(`http://localhost:3001/budget/${userId}/update/budget`,{
+      method: "PUT",
       headers: {
           'authorization': 'Bearer ' + jwt,
           'content-type': 'application/json'
@@ -47,11 +43,11 @@ export default function AddGoal() {
       {
         console.log("Added Goal")
         setColor("alert alert-success")
-        setError("Added Goal")
+        setError("Updated Total Budget")
       }
       else
       {
-        throw new Error("Failed to add goal")
+        throw new Error("Failed to update total Budget")
       }
     })
     .catch(error => {
@@ -69,12 +65,10 @@ export default function AddGoal() {
             </div>
           }
       </div>
-      <form className="grid gap-2" onSubmit={(e) => addgoal(e)}>
-          <label htmlFor='title'>Goal Title:</label>
-          <input type="text" id="title" name="title" placeholder="Buy a house" className="input input-bordered w-full max-w-xs" required/>
-          <label htmlFor='description'>Goal Amount:</label>
+      <form className="grid gap-2" onSubmit={(e) => changeBudget(e)}>
+          <label htmlFor='description'>Budget Amount:</label>
           <input type="number" id="amount" name="amount" placeholder="100" step={0.01} className="input input-bordered w-full max-w-xs" required/>
-          <input type="submit" className="btn btn-active btn-primary" value={"Add Goal"}/>
+          <input type="submit" className="btn btn-active btn-primary" value={"Update Budget Total"}/>
       </form>
     </div>
   )

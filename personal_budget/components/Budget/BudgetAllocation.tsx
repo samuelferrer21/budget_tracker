@@ -6,6 +6,8 @@ import BudgetLabel from './budgetLabel'
 import BudgetGraphs from './budgetGraphs'
 import useSupabase from '@/hooks/useSupabase'
 import BudgetStat from './budgetStat'
+import Modal from '../modal'
+import NewBudget from './newBudget'
 
 //Variables to calculate the subtracted total
 let newHousingAllocated = 0;
@@ -16,7 +18,17 @@ let newEntertainmentAllocated = 0;
 let newOtherAllocated = 0;
 
 export default function BudgetAllocation() {
+  //
   const [currentBudget, setCurrentBudget] = useState<number>(0)
+  const [budgetAllocated, setBudgetAllocated] = useState<number>(0)
+  const [housingAllocated, setHousingAllocated] = useState<number>(0)
+  const [foodAllocated, setFoodAllocated] = useState<number>(0)
+  const [savingsAllocated, setSavingsAllocated] = useState<number>(0)
+  const [transportationAllocated, setTransportationAllocated] = useState<number>(0)
+  const [entertainmentAllocated, setEntertainmentAllocated] = useState<number>(0)
+  const [otherAllocated, setOtherAllocated] = useState<number>(0)
+  //Submit Button State
+  const [buttonDisabled, setButtonDisabled] = useState(false)
   useEffect(() => {
     async function fetchBudget(){
       const supabase = useSupabase()
@@ -32,6 +44,24 @@ export default function BudgetAllocation() {
       })
       let value = await res.json()
       setCurrentBudget(value.body[0]['total_budget'])
+      setBudgetAllocated(value.body[0]['total_budget'])
+      setHousingAllocated(value.body[0]['housing_allocation'])
+      setFoodAllocated(value.body[0]['food_allocation'])
+      setSavingsAllocated(value.body[0]['savings_allocation'])
+      setTransportationAllocated(value.body[0]['transportation_allocation'])
+      setEntertainmentAllocated(value.body[0]['entertainment_allocation'])
+      setOtherAllocated(value.body[0]['other_allocation'])
+
+      //Subtracted Values
+      newHousingAllocated  = value.body[0]['housing_allocation']
+      newFoodAllocated = value.body[0]['food_allocation']
+      newSavingsAllocated   = value.body[0]['savings_allocation']
+      newTransportationAllocated  = value.body[0]['transportation_allocation']
+      newEntertainmentAllocated = value.body[0]['entertainment_allocation']
+      newOtherAllocated = value.body[0]['other_allocation']
+
+      //Updates budget Allocation
+      setBudgetAllocated(value.body[0]['total_budget'] - totalSubtracted())
       
     }
     fetchBudget()
@@ -40,16 +70,7 @@ export default function BudgetAllocation() {
   
 
 
-  const budget = 3500
-  const [budgetAllocated, setBudgetAllocated] = useState<number>(budget)
-  const [housingAllocated, setHousingAllocated] = useState<number>(0)
-  const [foodAllocated, setFoodAllocated] = useState<number>(0)
-  const [savingsAllocated, setSavingsAllocated] = useState<number>(0)
-  const [transportationAllocated, setTransportationAllocated] = useState<number>(0)
-  const [entertainmentAllocated, setEntertainmentAllocated] = useState<number>(0)
-  const [otherAllocated, setOtherAllocated] = useState<number>(0)
-  //Submit Button State
-  const [buttonDisabled, setButtonDisabled] = useState(false)
+  
   //Response States
   const [error, setError] = useState<string>()
   const [color, setColor] = useState<string>()
@@ -99,9 +120,9 @@ export default function BudgetAllocation() {
         break
     }
     
-    setBudgetAllocated(budget - totalSubtracted())
+    setBudgetAllocated(currentBudget - totalSubtracted())
     //Error Flash
-    if (totalSubtracted() > budget)
+    if (totalSubtracted() > currentBudget)
     {
       //Sets the alert message
       setError("Cant go over budget!")
@@ -140,7 +161,7 @@ export default function BudgetAllocation() {
     
 
     //Creates a POST request to create transaction
-    const userRequest = fetch(`http://localhost:3001/budget/${userId}/update`,{
+    const userRequest = fetch(`http://localhost:3001/budget/${userId}/update/allocation`,{
       method: "PUT",
       headers: {
           'authorization': 'Bearer ' + jwt,
@@ -172,9 +193,9 @@ export default function BudgetAllocation() {
           <div className="card-body">
               <h2 className="card-title">Budget Allocation</h2>
               <div>
-                <p>Current Budget: ${budget}</p>
-                <p>Budget Allocated $: {budgetAllocated}</p>
-                <button className="btn btn-neutral">Reset Budget</button>
+                <p>Current Budget: ${currentBudget}</p>
+                <p>Budget Available $: {budgetAllocated}</p>
+                <Modal title='Change Budget Total' id='Change Budget' data={<NewBudget/>}/>
               </div>
               <div id="response" className="mb-4">
                       {error && 
@@ -187,27 +208,27 @@ export default function BudgetAllocation() {
                 <form  onSubmit={submitForm}>
                   <div>
                     <BudgetLabel title="Housing" allocated={housingAllocated}/>
-                    <input type="range" min="0" max={budget} id='Housing' step="1" name='Housing' className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
+                    <input type="range" min="0" max={currentBudget} id='Housing' step="1" name='Housing' className="range" defaultValue={housingAllocated} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
                   </div>
                   <div>
                     <BudgetLabel title="Food" allocated={foodAllocated}/>
-                    <input type="range" min="0" max={budget} id='Food' name='Food' step="1" className="range"  defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
+                    <input type="range" min="0" max={currentBudget} id='Food' name='Food' step="1" className="range"  defaultValue={foodAllocated} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
                   </div>
                   <div>
                     <BudgetLabel title="Savings" allocated={savingsAllocated}/>
-                    <input type="range" min="0" max={budget} id='Savings' name='Savings' step="1" className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e) }/>
+                    <input type="range" min="0" max={currentBudget} id='Savings' name='Savings' step="1" className="range" defaultValue={savingsAllocated} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e) }/>
                   </div>
                   <div>
                     <BudgetLabel title="Transportation" allocated={transportationAllocated}/>
-                    <input type="range" min="0" max={budget} id='Transportation' step="1" name='transportation' className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
+                    <input type="range" min="0" max={currentBudget} id='Transportation' step="1" name='transportation' className="range" defaultValue={transportationAllocated} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
                   </div>
                   <div>
                     <BudgetLabel title="Entertainment" allocated={entertainmentAllocated}/>
-                    <input type="range" min="0" max={budget} id='Entertainment'step="1" name='Entertainment' className="range" defaultValue={'0'} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
+                    <input type="range" min="0" max={currentBudget} id='Entertainment'step="1" name='Entertainment' className="range" defaultValue={newEntertainmentAllocated} onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
                   </div>
                   <div>
                     <BudgetLabel title="Other" allocated={otherAllocated}/>
-                    <input type="range" min="0" max={budget} id='Other' name='Other' className="range" defaultValue={'0'} step="1" onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
+                    <input type="range" min="0" max={currentBudget} id='Other' name='Other' className="range" defaultValue={newOtherAllocated} step="1" onClick={e => setBudgetAllocation(e)} onChange={e => setBudgetAllocation(e)}/>
                   </div>
                   <input type="submit" disabled={buttonDisabled} className="btn btn-active btn-primary" value={"Set Allocation"}/>
                 </form>
