@@ -8,6 +8,8 @@ import useSupabase from '@/hooks/useSupabase'
 import BudgetStat from './budgetStat'
 import Modal from '../modal'
 import NewBudget from './newBudget'
+import CurrentBudgetGraph from './currentBudgetGraph'
+
 
 //Variables to calculate the subtracted total
 let newHousingAllocated = 0;
@@ -19,6 +21,8 @@ let newOtherAllocated = 0;
 
 export default function BudgetAllocation() {
   //
+  const [newBudgetSubmitted, setNewBudgetSubmitted] = useState(true)
+  const [currentBudgetData, setCurrentBudgetData] = useState<React.JSX.Element>()
   const [currentBudget, setCurrentBudget] = useState<number>(0)
   const [budgetAllocated, setBudgetAllocated] = useState<number>(0)
   const [housingAllocated, setHousingAllocated] = useState<number>(0)
@@ -42,7 +46,16 @@ export default function BudgetAllocation() {
           'content-type': 'application/json'
         }
       })
+      
       let value = await res.json()
+
+      //Resets the current graph to refelct submitted value
+      let currentGraph = ( <CurrentBudgetGraph housingValue={value.body[0]['housing_allocation']} foodValue={value.body[0]['food_allocation']} transportationValue={value.body[0]['transportation_allocation']} savingsValue={value.body[0]['savings_allocation']} entertainmentValue={value.body[0]['entertainment_allocation']} otherValue={value.body[0]['other_allocation']}/>
+      )
+      console.log("Graph Loaded")
+      setCurrentBudgetData(currentGraph)
+
+      //Sets the value of the budget graphs
       setCurrentBudget(value.body[0]['total_budget'])
       setBudgetAllocated(value.body[0]['total_budget'])
       setHousingAllocated(value.body[0]['housing_allocation'])
@@ -62,20 +75,15 @@ export default function BudgetAllocation() {
 
       //Updates budget Allocation
       setBudgetAllocated(value.body[0]['total_budget'] - totalSubtracted())
-      
+      setNewBudgetSubmitted(false)
+      console.log("runs useffect")
     }
     fetchBudget()
-  },[])
-  
-  
+  },[newBudgetSubmitted])
 
-
-  
   //Response States
   const [error, setError] = useState<string>()
   const [color, setColor] = useState<string>()
-
-
   
   //Calculates the total to be subtracted
   function totalSubtracted()
@@ -172,7 +180,9 @@ export default function BudgetAllocation() {
       if(response.status == 200)
       {
         setColor("alert alert-success");
-        setError("Updated Goal");
+        setError("Updated Budget");
+        setNewBudgetSubmitted(true)
+        
       }
       else
       {
@@ -237,7 +247,7 @@ export default function BudgetAllocation() {
       </div>
       {/* Graphs */}
       <div>
-          <BudgetGraphs housing={housingAllocated} food={foodAllocated} transportation={transportationAllocated} savings={savingsAllocated} entertainment={entertainmentAllocated} other={otherAllocated}/>
+          <BudgetGraphs housing={housingAllocated} currentGraph={currentBudgetData} food={foodAllocated} transportation={transportationAllocated} savings={savingsAllocated} entertainment={entertainmentAllocated} other={otherAllocated}/>
         </div>
     </div>
   </div>

@@ -16,6 +16,7 @@ export default function NewBudget() {
     setError(null)
 
     const formEvent = event.currentTarget as HTMLFormElement
+    
 
     const formData = new FormData(formEvent)
 
@@ -44,6 +45,7 @@ export default function NewBudget() {
         console.log("Added Goal")
         setColor("alert alert-success")
         setError("Updated Total Budget")
+        window.location.reload()
       }
       else
       {
