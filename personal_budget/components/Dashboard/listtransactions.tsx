@@ -22,9 +22,10 @@ export default function ListTransactions(props: props) {
     
       //Get jwt
       const jwt = (await supabase.auth.getSession()).data.session?.access_token;
+      const userId = (await supabase.auth.getSession()).data.session?.user.id;
     
       //Creates a GET request to fetch the user transactions
-      const res = await fetch('http://localhost:3001/transaction/gettransactions',{
+      const res = await fetch(`http://localhost:3001/transaction/${userId}/transactions`,{
         method: "GET",
         headers: {
           'authorization': 'Bearer ' + jwt,
@@ -33,7 +34,6 @@ export default function ListTransactions(props: props) {
       })
       
       let data = await res.json();
-      console.log(data['data'])
       let listItems = null
 
       listItems = await data['data'].map(item=> (
@@ -41,16 +41,19 @@ export default function ListTransactions(props: props) {
           <td>{item.transaction_name}</td>
           <td>{item.transaction_description}</td>
           <td>{item.categories.category_name}</td>
-          <td>{item.transaction_price}</td>
+          <td>${item.transaction_price}</td>
           <td>{item.date}</td>
         </tr>
       ))
       setTransactions(listItems);
-      props.setLoading(false)
+      
     }
-
+    
+    
     if(props.loading)
     {
+      console.log("UseEffect Ran")
+      props.setLoading(false)
       fetchTransactions();
     }
   },[props.loading])

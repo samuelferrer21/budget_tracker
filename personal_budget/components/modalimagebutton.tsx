@@ -22,9 +22,9 @@ export default function ModalImageButton( props: props ) {
                     viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1"
                     d={props.svg_path} />
                 </svg>
             </div>

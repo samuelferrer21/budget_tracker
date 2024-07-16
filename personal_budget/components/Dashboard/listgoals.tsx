@@ -30,12 +30,10 @@ export default function ListGoals() {
               }
             })
             let data = await res.json();
-            console.log(await data['data'])
-
             let listGoals = null
 
             listGoals = await data['data'].map(item => (
-                <div>
+                <div key={item.id}>
                     <div className='flex'>
                         <label>{item.goal_title} </label>
                         <p>&nbsp;{Math.round((Math.round(item.goal_amount_saved) / Math.round(item.goal_amount)) * 100)}%</p>

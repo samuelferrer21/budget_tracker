@@ -20,7 +20,7 @@ let newEntertainmentAllocated = 0;
 let newOtherAllocated = 0;
 
 export default function BudgetAllocation() {
-  //
+  //States of the progress bar
   const [newBudgetSubmitted, setNewBudgetSubmitted] = useState(true)
   const [currentBudgetData, setCurrentBudgetData] = useState<React.JSX.Element>()
   const [currentBudget, setCurrentBudget] = useState<number>(0)

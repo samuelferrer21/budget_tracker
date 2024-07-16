@@ -11,8 +11,8 @@ export default function BudgetStat(props: props) {
         <div className="stats shadow">
             <div className="stat">
                 <div className="stat-title">Current Budget</div>
-                <div className="stat-value">{props.budget}</div>
-                <div className="stat-desc">Jan 1st - Feb 1st</div>
+                <div className="stat-value">${props.budget}</div>
+                <div className="stat-desc">Per Month</div>
             </div>
         </div>
     </div>

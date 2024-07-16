@@ -9,12 +9,9 @@ export interface props {
 
 export default function AddTransaction(props: props){
   const selectionOptions = props.categories
-  console.log(props.categories)
-
   const [colorstatus, setColor] = useState("");
   //Trackstate of flash message 
   const [error, setError] = useState<string | null>(null)
-
   //Store category data
   let categories = null
   
@@ -52,9 +49,10 @@ export default function AddTransaction(props: props){
     };
     //Get jwt
     const jwt = (await supabase.auth.getSession()).data.session?.access_token;
+    const userId = (await supabase.auth.getSession()).data.session?.user.id;
 
     //Creates a POST request to create transaction
-    const userRequest = fetch('http://localhost:3001/transaction/addtransaction',{
+    const userRequest = fetch(`http://localhost:3001/transaction/${userId}/addtransaction`,{
         
       method: "POST",
       headers: {
@@ -96,7 +94,7 @@ export default function AddTransaction(props: props){
           <label htmlFor='title'>Name of Transaction:</label>
           <input type="text" id="title" name="title" placeholder="Taco Bell" className="input input-bordered w-full max-w-xs" required/>
           <label htmlFor='description'>Description:</label>
-          <input type="text" id="description" name="description" placeholder="Password" className="input input-bordered w-full max-w-xs"/>
+          <input type="text" id="description" name="description" placeholder="Taco bell with joe" className="input input-bordered w-full max-w-xs"/>
           <label htmlFor='category'>Category:</label>
           <select id="category" name="category" className="select select-bordered w-full max-w-xs" required>
             <option id='default' disabled>Category</option>
@@ -105,7 +103,7 @@ export default function AddTransaction(props: props){
           <label htmlFor='date'>Date:</label>
           <input id='date' name='date' typeof='Date' type="date" onClick={(e) => e.currentTarget.showPicker()} onFocus={(e) => e.currentTarget.showPicker()} className="input input-bordered w-full max-w-xs"/>
           <label htmlFor='cost'>Cost of Transaction:</label>
-          <input type="number" id="cost" name="cost" placeholder="23.22" className="input input-bordered w-full max-w-xs" required/>
+          <input type="number" id="cost" name="cost" placeholder="23.22" step={0.001} className="input input-bordered w-full max-w-xs" required/>
           <input type="submit" className="btn btn-active btn-primary" value={"Add Transaction"}/>
       </form>
     </div>

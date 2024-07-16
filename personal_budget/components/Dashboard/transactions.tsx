@@ -10,6 +10,7 @@ import { use } from 'react';
 
 export default function Transactions() {
     const [categoryData, setCategoryData] = useState(null)
+    const [loading, setLoading] = useState(true)
     useEffect(() =>{
         async function categoriesData()
         {
@@ -19,9 +20,9 @@ export default function Transactions() {
         categoriesData()
         
 
-    },[])
+    },[loading])
     
-    const [loading, setLoading] = useState(true)
+    
   return (
     <div>
         <div className="card lg:card-side bg-base-300 shadow-xl w-full mb-4">
