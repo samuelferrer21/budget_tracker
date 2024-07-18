@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 
 export default function Budgetused() {
   const [usedBudget, setBudget] = useState<React.JSX.Element>()
+  const [isLoading, setIsLoading] = useState(true)
 
   //States to manage 
   useEffect(() => {
@@ -58,20 +59,26 @@ export default function Budgetused() {
           <progress className="progress progress-success" value={currentOtherProgress} max={data.body[0]['other_allocation']}></progress>
         </div>
       )
-
+      setIsLoading(false)
       setBudget(currentProgress)
     }
     calculateBudgetUsed()
 
     
-  },[])
+  },[isLoading])
+
+  function refresh()
+  {
+    setIsLoading(true)
+  }
   return (
     <div className="card lg:card-side bg-base-300 shadow-xl ">
         <div className="card-body">
             <h2 className="card-title">Budget Used</h2>
-            {usedBudget}
+            {isLoading ? <span className="loading loading-spinner text-secondary"></span> : usedBudget}
             
             <div className="card-actions justify-end">
+              <button className="btn btn-neutral" onClick={() => refresh()}>Refresh</button>
             </div>
         </div>
     </div>
