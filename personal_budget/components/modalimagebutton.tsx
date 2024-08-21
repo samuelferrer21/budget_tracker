@@ -4,13 +4,30 @@ import React from "react";
 export interface props {
     title: string;
     id: string;
+    svg: string;
+    svg_path: string;
     data: React.ReactNode;
+
   }
 
-export default function Modal( props: props ) { 
+export default function ModalImageButton( props: props ) { 
     return (
         <div>
-            <button className=" text-white btn btn-neutral"  onClick={() => (document.getElementById(props.id) as HTMLFormElement).showModal()}>{props.title}</button>
+            <div>
+                <svg
+                    onClick={() => (document.getElementById(props.id) as HTMLFormElement).showModal()}
+                    xmlns= {props.svg}
+                    className="h-6 w-6 hover:stroke-neutral-content"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1"
+                    d={props.svg_path} />
+                </svg>
+            </div>
             <dialog id={props.id} className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{props.title}</h3>
