@@ -101,7 +101,7 @@ export default function AddTransaction(props: props){
             {categories}
           </select>
           <label htmlFor='date'>Date:</label>
-          <input id='date' name='date' typeof='Date' type="date" onClick={(e) => e.currentTarget.showPicker()} onFocus={(e) => e.currentTarget.showPicker()} className="input input-bordered w-full max-w-xs"/>
+          <input id='date' name='date' typeof='Date' type="date" onClick={(e) => e.currentTarget.showPicker()} max={new Date().toISOString().split("T")[0]} className="input input-bordered w-full max-w-xs"/>
           <label htmlFor='cost'>Cost of Transaction:</label>
           <input type="number" id="cost" name="cost" placeholder="23.22" step={0.001} className="input input-bordered w-full max-w-xs" required/>
           <input type="submit" className="btn btn-active btn-primary" value={"Add Transaction"}/>

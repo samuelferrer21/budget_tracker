@@ -15,6 +15,20 @@ Description: Lists all the items of the transactions using props recieved from t
 export default function ListTransactions(props: props) {
   const [transactions, setTransactions] = useState([])
 
+  
+
+  function deleteTransaction(user_id: string, transaction_id: string, jwt: string) {
+
+    fetch(`http://localhost:3001/transaction/${user_id}/${transaction_id}/delete`,{
+        method: "DELETE",
+        headers: {
+          'authorization': 'Bearer ' + jwt,
+          'content-type': 'application/json'
+      }
+    })
+    props.setLoading(true)
+  }
+
   useEffect(() => {
     //Fetches transactions
     async function fetchTransactions(){
@@ -43,6 +57,7 @@ export default function ListTransactions(props: props) {
           <td>{item.categories.category_name}</td>
           <td>${item.transaction_price}</td>
           <td>{item.date}</td>
+          <td><a onClick={() => {deleteTransaction(userId, item.id, jwt)}}>Delete</a></td>
         </tr>
       ))
       setTransactions(listItems);
@@ -52,7 +67,6 @@ export default function ListTransactions(props: props) {
     
     if(props.loading)
     {
-      console.log("UseEffect Ran")
       props.setLoading(false)
       fetchTransactions();
     }
@@ -70,6 +84,7 @@ export default function ListTransactions(props: props) {
                 <td>Type</td> 
                 <td>Price</td> 
                 <td>Date</td> 
+                <td>Actions</td> 
             </tr>
           </thead> 
           <tbody className=" overflow-scroll h-40 ">
@@ -82,6 +97,7 @@ export default function ListTransactions(props: props) {
                 <td>Type</td> 
                 <td>Price</td> 
                 <td>Date</td>
+                <td>Actions</td> 
             </tr>
           </tfoot>
         </table>

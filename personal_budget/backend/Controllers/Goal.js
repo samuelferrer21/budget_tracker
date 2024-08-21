@@ -8,16 +8,21 @@ exports.getgoal = async (req, res) => {
         const jwt = req.headers.authorization.replace("Bearer ", "")
    
         const {data, error} = ((await supabase.auth.getUser(jwt)))
-        let id = data.user.id
-        //Verify validity of user and access token
+        console.log('get goals')
+        
+        //Verify validity if access token provides a user
         if(data.user == null)
         {
             throw new Error(error)
         }
+        else if (data.user.id != req.params.id)
+        {
+            throw new Error("Authentication of user failed.")
+        }
         else
         {
             //Grabs Transactions
-            const {data, error} = await supabase.from('goals').select('*').eq('user_id', id).order('goal_title', { ascending: true })
+            const {data, error} = await supabase.from('goals').select('*').eq('user_id', req.params.id).order('goal_title', { ascending: true })
 
             return res.status(200).json({message:"Retrieved goals", data})
         }
@@ -33,22 +38,21 @@ exports.addgoal = async (req, res,) =>{
     try {
 
         const jwt = req.headers.authorization.replace("Bearer ", "")
-        console.log(jwt)
         const {data, error} = ((await supabase.auth.getUser(jwt)))
-        console.log(data.user.id)
         //Verify validity of user and access token
         if(data.user == null)
         {
             throw new Error(error)
+        }
+        else if (data.user.id != req.params.id)
+        {
+            throw new Error("Authentication of user failed.")
         }
         else
         {
             const user_id = data.user.id
             const title = req.body.title
             const amount = req.body.amount
-            console.log(user_id)
-            console.log(title)
-            console.log(amount)
 
             //Create Transaction
             const {error} = await supabase.from("goals").insert(
@@ -91,9 +95,12 @@ exports.newcontribution = async (req, res) => {
         {
             throw new Error(error)
         }
+        else if (data.user.id != req.params.id)
+        {
+            throw new Error("Authentication of user failed.")
+        }
         else
         {
-            const user_id = data.user.id
             const goal_id = req.body.goal_id
             const newAmount = req.body.amount
 
@@ -102,11 +109,10 @@ exports.newcontribution = async (req, res) => {
                 {
                     goal_amount_saved: Number.parseFloat(newAmount),
                 }
-            ).eq('user_id', user_id).eq('id', goal_id)
+            ).eq('user_id', req.params.id).eq('id', goal_id)
 
             if(error != null)
             {
-                console.log(error.message)
                 throw new Error(error.message)
             }
             else
@@ -134,6 +140,10 @@ exports.modifygoals = async (req, res) => {
         if(data.user == null)
         {
             throw new Error(error)
+        }
+        else if (data.user.id != req.params.id)
+        {
+            throw new Error("Authentication of user failed.")
         }
         else
         {

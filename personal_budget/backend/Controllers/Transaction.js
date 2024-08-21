@@ -119,3 +119,39 @@ exports.gettotaltransactions = async (req, res) => {
     }
 
 }
+
+exports.deletetransaction= async (req, res,) =>{
+    try {
+        
+        const jwt = req.headers.authorization.replace("Bearer ", "")
+
+        const {data, error} = ((await supabase.auth.getUser(jwt)))
+
+        const transaction_id = req.params.transaction_id
+
+        let id = data.user.id
+        //Verify validity of user and access token
+        if(data.user == null)
+        {
+            throw new Error(error)
+        }
+        else
+        {
+            //Verify that the userid from jwt matches with the paramter  
+            if(id != req.params.id)
+            {
+                throw new Error("Failed Authorization")
+            }
+
+            
+            //Create Transaction
+            const {error} = await supabase.from("transactions").delete().eq('id', transaction_id)
+
+            return res.status(200).json({message:"Deleted Transaction"})
+        }
+    }
+    catch (error)
+    {
+       return res.status(400).json({message: 'Error Occured', error})
+    }
+}

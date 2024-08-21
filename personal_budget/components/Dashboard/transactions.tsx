@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import Modal from '../modal';
-import AddTransaction from './addtransaction';
+import AddTransaction from './modals_data/transaction_data/addtransaction';
 import ListTransactions from './listtransactions';
 import { use } from 'react';
 

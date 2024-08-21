@@ -2,8 +2,8 @@
 import useSupabase from '@/hooks/useSupabase'
 import React, { createContext, useContext, useEffect,useState } from 'react'
 import ModalImageButton from '../modalimagebutton'
-import AddMoney from './addmoney'
-import UpdateGoal from './updategoal'
+import AddMoney from './modals_data/goals_data/addmoney'
+import UpdateGoal from './modals_data/goals_data/updategoal'
 
 export default function ListGoals() {
 
@@ -21,8 +21,9 @@ export default function ListGoals() {
             const supabase = useSupabase()
 
             const jwt = (await supabase.auth.getSession()).data.session?.access_token
+            const userid = (await supabase.auth.getSession()).data.session?.user.id
 
-            const res = await fetch('http://localhost:3001/goal/getgoal',{
+            const res = await fetch(`http://localhost:3001/goal/${userid}/goals`,{
                 method: "GET",
                 headers: {
                   'authorization': 'Bearer ' + jwt,

@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Modal from '../modal'
-import AddGoal from './addgoal'
+import AddGoal from './modals_data/goals_data/addgoal'
 import ListGoals from './listgoals'
 
 export default function Goals() {
