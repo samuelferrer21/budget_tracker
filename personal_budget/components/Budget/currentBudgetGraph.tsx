@@ -3,27 +3,55 @@ import React, { useEffect,useRef } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
-export default function CurrentBudgetGraph() {    
+export interface props{
+  housingValue: number,
+  foodValue: number,
+  savingsValue: number,
+  transportationValue: number,
+  entertainmentValue: number,
+  otherValue: number
+}
+
+export default function CurrentBudgetGraph(props: props) {    
+
     //Register controllers and items
     ChartJS.register(ArcElement, Tooltip, Legend,);
 
     let data = [
         {
-          label: "Label 1",
-          value: 55,
-          color: "rgba(0, 43, 73, 1)",
+          label: "Housing",
+          value: props.housingValue,
+          color: "rgba(142, 202, 230)",
           cutout: "50%",
         },
         {
-          label: "Label 2",
-          value: 15,
-          color: "rgba(0, 103, 160, 1)",
+          label: "Food",
+          value: props.foodValue,
+          color: "rgba(33, 158, 188)",
           cutout: "50%",
         },
         {
-          label: "Label 3",
-          value: 80,
-          color: "rgba(83, 217, 217, 1)",
+          label: "Savings",
+          value: props.savingsValue,
+          color: "rgba(2, 48, 71)",
+          cutout: "50%",
+        },
+        {
+          label: "Transportation",
+          value: props.transportationValue,
+          color: "rgba(255, 183, 3)",
+          cutout: "50%",
+        },
+        {
+          label: "Entertainment",
+          value: props.entertainmentValue,
+          color: "rgba(255, 183, 3)",
+          cutout: "50%",
+        },
+        {
+          label: "Other",
+          value: props.otherValue,
+          color: "rgba(251, 133, 0)",
           cutout: "50%",
         },
       ];

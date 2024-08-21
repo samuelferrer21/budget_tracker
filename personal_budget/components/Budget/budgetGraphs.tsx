@@ -1,8 +1,10 @@
-import React from 'react'
+'use Client'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import PropsedBudgetGraph from './propsedBudgetGraph'
 import CurrentBudgetGraph from './currentBudgetGraph'
 
 export interface props{
+  currentGraph: any,
   housing: number,
   food: number,
   savings: number,
@@ -12,6 +14,7 @@ export interface props{
 }
 
 export default function BudgetGraphs(props: props) {
+
     
   return (
     <div >
@@ -21,8 +24,7 @@ export default function BudgetGraphs(props: props) {
               <div className="card-title">
                 Current Budget
               </div>
-              <CurrentBudgetGraph/>
-            
+              {props.currentGraph}
             </div>
         </div>
         {/* Proposed Allocation */}
