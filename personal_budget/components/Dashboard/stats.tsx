@@ -24,7 +24,6 @@ export default function Stats() {
         }
       })
       let value = await res.json()
-      console.log(value['body'][0]['total_budget'])
       setTotalBudget(value['body'][0]['total_budget'])
     }
     //Total Used
@@ -41,8 +40,17 @@ export default function Stats() {
         }
       })
       let transactionData = await transactionsRes.json()
-      setTotalBudgetSubtracted(transactionData['data'][0]['total_sum'])
-      console.log(transactionData['data'][0]['total_sum'])
+      //Sets to zero if null
+      if(transactionData['data'][0]['total_sum'] == null)
+      {
+        setTotalBudgetSubtracted(0)
+      }
+      else
+      {
+        setTotalBudgetSubtracted(transactionData['data'][0]['total_sum'])
+      }
+      
+      
     }
     fetchBudget()
     fetchUsedBudget()
@@ -66,8 +74,7 @@ export default function Stats() {
                 <div className="stat-figure text-secondary">
                 </div>
                 <div className="stat-title">Money spent this month</div>
-                <div className="stat-value">${totalBudgetSubtracted}</div>
-                <div className="stat-desc">400 (22%)</div>
+                <div className="stat-value text-red-700">${totalBudgetSubtracted}</div>
             </div>
             <button className="btn btn-neutral" onClick={() => refresh()}>Refresh</button>
         </div>
