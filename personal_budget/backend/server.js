@@ -7,9 +7,10 @@ const categoryRoute = require("./Routes/Categories/categories")
 const transactionRoute = require("./Routes/Transaction/transactions")
 const goalRoute = require("./Routes/Goals/goals")
 const budgetRoute = require("./Routes/Budgets/budgets")
+const dotenv = require('dotenv');
 
 
-require("dotenv").config();
+
 
 //Fixes cors issues and enables credentials / middleware doesnt seem to be working.
 app.use((req, res, next) => {
